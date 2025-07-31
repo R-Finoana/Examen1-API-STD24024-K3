@@ -4,12 +4,10 @@ from starlette.responses import JSONResponse, Response
 
 app = FastAPI()
 
-@app.get("/")
-def get_info(request: Request):
-    accept_headers = request.headers.get("Accept")
-    if accept_headers != "text/html" or accept_headers != "text/html":
-        return JSONResponse({"message": "Unsupported Media Type"}, status_code=415)
-    return JSONResponse(content="HELLO WORLD", status_code=200)
+@app.get("/ping")
+def get_ping(request: Request):
+    return Response(content="pong", status_code=200, media_type="text/plain")
+
 
 @app.post("/")
 def create_post():
