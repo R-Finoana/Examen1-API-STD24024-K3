@@ -43,6 +43,10 @@ def create_post(post_payload: List[PostModel]):
     posts_store.extend(post_payload)
     return JSONResponse({"posts": serialized_stored_posts()}, status_code=201)
 
+@app.get("/posts")
+def posts_list():
+    return JSONResponse({"posts_list": serialized_stored_posts()}, status_code=200)
+
 @app.put("/")
 def put_update():
     return Response({"message": "Update recorded successfully !"}, status_code=200)
