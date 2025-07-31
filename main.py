@@ -47,6 +47,17 @@ def create_post(post_payload: List[PostModel]):
 def posts_list():
     return JSONResponse({"posts_list": serialized_stored_posts()}, status_code=200)
 
-@app.put("/")
-def put_update():
-    return Response({"message": "Update recorded successfully !"}, status_code=200)
+@app.put("/posts")
+def create_or_update_post(post_payload: List[PostModel]):
+    global posts_store
+
+    for new_post in post_payload:
+        found = False
+        for i, existing_post in enumerate(posts_store):
+            if new_post.title == existing_post.title:
+                posts_store[i] = new_post
+                found = True
+                break
+        if not found:
+            posts_store.append(new_post)
+    return {"posts": serialized_stored_posts()}
