@@ -17,12 +17,13 @@ def welcome_user(request: Request):
     with open("welcome.html", "r", encoding="utf-8") as file:
         html_content = file.read()
         return Response(content=html_content, status_code=200, media_type="text/html")
-
+"""
 @app.get("/{full_path:path}")
 def unknown_paths(full_path: str):
     with open("notFound.html", "r", encoding="utf-8") as file:
         html_content = file.read()
     return Response(content=html_content, status_code=404, media_type="text/html")
+    """
 
 class PostModel(BaseModel):
     author: str
@@ -61,3 +62,10 @@ def create_or_update_post(post_payload: List[PostModel]):
         if not found:
             posts_store.append(new_post)
     return {"posts": serialized_stored_posts()}
+
+@app.get("/ping/auth")
+def get_ping_authorization(request: Request):
+    auth_headers = request.auth.type("Basic auth")
+    if auth_headers.username != "admin" and auth_headers.password != "123456":
+        return JSONResponse(content="Access permission forbidden", status_code=403)
+    return Response(content="pong", status_code=200, media_type="text/plain")
